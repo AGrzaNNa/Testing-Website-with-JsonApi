@@ -1,38 +1,135 @@
-.App {
-  text-align: center;
-}
+@import url('https://fonts.googleapis.com/css?family=Montserrat:500');
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family:"Montserrat",sans-serif;
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.App-body{
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  min-height: 100vh;
+  background: rgb(169, 193, 58);
+  background-size: cover;
+  background-position: center;
+}
+header{
+  position: fixed;
+  top:0;
+  left:0;
+  height: 80px;
+  width: 100%;
+  padding: 20px 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 99;
+}
+.App-Logo{
+  font-size: 2em;
+  color: aliceblue;
+  user-select:none;
+  margin: -50px;
 }
 
-.App-link {
-  color: #61dafb;
+.App-navi a{
+  align-items: center;
+  position: relative;
+  font-size: 1.1em;
+  color: aliceblue;
+  text-decoration: none;
+  font-weight: 500;
+  margin: 120px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navigation .btnlogin{
+  width: 130px;
+  height: 50px;
+  background: transparent;
+  border: 2px solid aliceblue;
+  outline: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: aliceblue;
+  font-weight: 500;
+  margin: -40px;
+  transition:.5s ;
 }
+.navigation .btnlogin:hover{
+  background: aliceblue;
+  color: navy;
+}
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 5%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.search-bar{
+  width: 100%;
+  height: 100px;
+  max-width: 600px;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  border-radius: 60px;
+  padding: 10px 20px;
+}
+.search-bar input{
+  background: transparent;
+  flex: 1;
+  border:0;
+  outline: none;
+  padding: 24px 20px;
+  font-size: 20px;
+  color:#cac7ff;
+}
+::placeholder{
+  color:#cac7ff;
+}
+.search-bar button img{
+  width: 25px;
+}
+.search-bar button{
+  border: 0;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  background: #cac7ff;
+  cursor: pointer;
+}
+
+.resaults {
+  margin: 20px;
+  position: absolute;
+  top:  25%;
+  left: 0;
+  align-items: center;
+  font-size: 15px;
+  color: aliceblue;
+  text-decoration: none;
+  font-weight: 50;
+  justify-content: center;
+}
+.showcomments{
+  width: 90px;
+  height: 40px;
+  font-size: 10px;
+  background: transparent;
+  border: 2px solid aliceblue;
+  outline: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: aliceblue;
+  transition:.5s ;
+}
+
+
+
