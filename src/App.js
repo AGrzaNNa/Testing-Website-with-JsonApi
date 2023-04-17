@@ -69,16 +69,14 @@ function App() {
         <div className="App">
             <div>
                 <div>
-                    <div>
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <input type="text" className={"search-bar input"}  placeholder="search anything" value={searchTerm} onChange={handleSearchChange} />
-                        <button className={"search-bar"} onClick={handleSearchClick}>
+
+                        <div className={"container"}>
+                        <input type="text" className={"search-bar"}  placeholder="search anything" value={searchTerm} onChange={handleSearchChange} />
+                        <button className={"search-bar-input"}  onClick={handleSearchClick}>
                             Search
                         </button>
-                    </div>
+                        </div>
+
                 </div>
                 <div id="search-results">
                     {posts.length === 0 && <p>No results found.</p>}
