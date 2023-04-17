@@ -12,7 +12,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: rgb(169, 193, 58);
+  background: rgb(73, 84, 27);
   background-size: cover;
   background-position: center;
 }
@@ -90,6 +90,10 @@ header{
   padding: 24px 20px;
   font-size: 20px;
   color:#cac7ff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 ::placeholder{
   color:#cac7ff;
