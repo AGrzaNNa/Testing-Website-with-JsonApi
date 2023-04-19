@@ -11,6 +11,7 @@ function App() {
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+
     };
 
     const handleSearchClick = () => {
