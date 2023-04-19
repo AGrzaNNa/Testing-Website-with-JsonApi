@@ -71,6 +71,11 @@ function App() {
                 </div>
                 <input type="text" className="search-bar-input" placeholder="Search" value={searchTerm} onChange={handleSearchChange} onKeyDown={handleKeyDown} />
             </div>
+            <div>
+                <button className="ten">10</button>
+                <button className="ten_more">10-15</button>
+                <button className="twenty">20</button>
+            </div>
             <nav className="App-navi">
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a href="#">Options</a>
@@ -86,10 +91,10 @@ function App() {
                         <br />
                         <br />
                         <br />
+                        <br />
                     </div>
                 </div>
                 <div id="search-results">
-                    {posts.length === 0 && <p>.</p>}
                     {posts.map((post) => (
                         <div key={post.id}>
                             <h2>{post.title}</h2>
