@@ -9,6 +9,11 @@ function App() {
         setSearchTerm(event.target.value);
     };
 
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            handleSearchClick();
+        }
+    }
     const handleSearchClick = () => {
         fetch('https://jsonplaceholder.typicode.com/posts')
             .then((response) => response.json())
@@ -60,11 +65,18 @@ function App() {
             <h2 className="App-Logo">
                 ByteBusters
             </h2>
+            <div className="search-box">
+                <div className="search-icon">
+                    <i className="fas fa-search"></i>
+                </div>
+                <input type="text" className="search-bar-input" placeholder="Search" value={searchTerm} onChange={handleSearchChange} onKeyDown={handleKeyDown} />
+            </div>
             <nav className="App-navi">
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a href="#">Options</a>
                 <button className="btnlogin">Login</button>
             </nav>
+
         </header>
         <div className="App">
             <div>
@@ -74,14 +86,10 @@ function App() {
                         <br />
                         <br />
                         <br />
-                        <input type="text" className={"search-bar input"}  placeholder="search anything" value={searchTerm} onChange={handleSearchChange} />
-                        <button className={"search-bar"} onClick={handleSearchClick}>
-                            Search
-                        </button>
                     </div>
                 </div>
                 <div id="search-results">
-                    {posts.length === 0 && <p>No results found.</p>}
+                    {posts.length === 0 && <p>.</p>}
                     {posts.map((post) => (
                         <div key={post.id}>
                             <h2>{post.title}</h2>
