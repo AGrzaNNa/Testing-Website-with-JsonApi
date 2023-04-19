@@ -1,5 +1,8 @@
 import './App.css';
-import {useState} from "react";
+import { useState } from 'react';
+import SearchBar from './SearchBar';
+import Header from './Header';
+import SearchResults from './SearchResults';
 
 function App() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -22,7 +25,7 @@ function App() {
                             .then((response) => response.json())
                             .then((user) => {
                                 post.name = user.name;
-                                post.puste="\n";
+                                post.commentsShown = false;
                                 return post;
                             })
                     )
@@ -32,8 +35,6 @@ function App() {
                 });
             });
     };
-
-
 
     const handleCommentClick = (postId) => {
         const postIndex = posts.findIndex((post) => post.id === postId);
@@ -53,58 +54,16 @@ function App() {
     };
 
     return (
-        <body
-            className="App-body">
-
-        <header>
-            <h2 className="App-Logo">
-                ByteBusters
-            </h2>
-            <nav className="App-navi">
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a href="#">Options</a>
-                <button className="btnlogin">Login</button>
-            </nav>
-        </header>
+        <body className="App-body">
         <div className="App">
-            <div>
-                <div>
-
-                        <div className={"container"}>
-                        <input type="text" className={"search-bar"}  placeholder="search anything" value={searchTerm} onChange={handleSearchChange} />
-                        <button className={"search-bar-input"}  onClick={handleSearchClick}>
-                            Search
-                        </button>
-                        </div>
-
-                </div>
-                <div id="search-results">
-                    {posts.length === 0 && <p>No results found.</p>}
-                    {posts.map((post) => (
-                        <div key={post.id}>
-                            <h2>{post.title}</h2>
-                            <p>Author: {post.name}</p>
-                            <p>{post.body}</p>
-                            <button className="showcomments" onClick={() => handleCommentClick(post.id)}>
-                                {post.commentsShown ? 'Hide Comments' : 'Show Comments'}
-                            </button>
-                            <br />
-                            {post.commentsShown && (
-                                <ul>
-                                    {post.comments.map((comment) => (
-                                        <li key={comment.id}>
-                                            <p>Author: {comment.email}</p>
-                                            <p>{comment.body}</p>
-                                            <br />
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                            <br />
-                        </div>
-                    ))}
-                </div>
-
+            <Header />
+            <div className="search-container">
+                <SearchBar
+                    searchTerm={searchTerm}
+                    handleSearchChange={handleSearchChange}
+                    handleSearchClick={handleSearchClick}
+                />
+                <SearchResults posts={posts} handleCommentClick={handleCommentClick} />
             </div>
         </div>
         </body>
