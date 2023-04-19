@@ -1,8 +1,9 @@
 import './App.css';
 import { useState } from 'react';
-import SearchBar from './SearchBar';
 import Header from './Header';
 import SearchResults from './SearchResults';
+import { handleSearch } from './handleSearch';
+import {handleComment} from "./handleComment";
 
 function App() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -13,61 +14,22 @@ function App() {
     };
 
     const handleSearchClick = () => {
-        fetch('https://jsonplaceholder.typicode.com/posts')
-            .then((response) => response.json())
-            .then((data) => {
-                const matchingPosts = data.filter((post) =>
-                    post.title.toLowerCase().startsWith(searchTerm.toLowerCase())
-                );
-                Promise.all(
-                    matchingPosts.map((post) =>
-                        fetch(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
-                            .then((response) => response.json())
-                            .then((user) => {
-                                post.name = user.name;
-                                post.commentsShown = false;
-                                return post;
-                            })
-                    )
-                ).then((postsWithUserData) => {
-                    setPosts(postsWithUserData);
-                    setSearchTerm('');
-                });
-            });
+        handleSearch(searchTerm, setPosts, setSearchTerm);
     };
 
     const handleCommentClick = (postId) => {
-        const postIndex = posts.findIndex((post) => post.id === postId);
-        const post = posts[postIndex];
-        if (post.commentsShown) {
-            post.commentsShown = false;
-            setPosts([...posts]);
-        } else {
-            fetch(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    post.commentsShown = true;
-                    post.comments = data;
-                    setPosts([...posts]);
-                });
-        }
+        handleComment(postId, posts, setPosts);
     };
 
     return (
-        <body className="App-body">
+        <body className={"App-body"}>
         <div className="App">
-            <Header />
-            <div className="search-container">
-                <SearchBar
-                    searchTerm={searchTerm}
-                    handleSearchChange={handleSearchChange}
-                    handleSearchClick={handleSearchClick}
-                />
-                <SearchResults posts={posts} handleCommentClick={handleCommentClick} />
+            <Header searchTerm={searchTerm} handleSearchChange={handleSearchChange} handleSearchClick={handleSearchClick}/>
+            <div className={"resaults"}>
+                <SearchResults className={"container"} posts={posts} handleCommentClick={handleCommentClick} />
             </div>
         </div>
         </body>
     );
 }
-
 export default App;
