@@ -25,6 +25,7 @@ function Header(props) {
             </div>
             <div>
                 <input type="number" className="number-input" placeholder="Number" onKeyDown={handleKeyDown} value={numberInput} onChange={handleNumberChange} onBlur={handleNumberInputBlur} />
+
             </div>
             <nav className="App-navi">
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
