@@ -4,18 +4,21 @@ import Header from './Header';
 import SearchResults from "./SearchResults";
 
 function App() {
+
+
     const [searchTerm, setSearchTerm] = useState('');
     const [posts, setPosts] = useState([]);
+    const [numberOfPosts, setNumberOfPosts] = useState(0);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    function handleKeyDown(event) {
+    const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             handleSearchClick();
         }
-    }
+    };
 
     const handleSearchClick = () => {
         fetch('https://jsonplaceholder.typicode.com/posts')
@@ -23,7 +26,8 @@ function App() {
             .then((data) => {
                 const matchingPosts = data.filter((post) =>
                     post.title.toLowerCase().startsWith(searchTerm.toLowerCase())
-                );
+                ).slice(0, numberOfPosts);
+
                 Promise.all(
                     matchingPosts.map((post) =>
                         fetch(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
@@ -42,23 +46,25 @@ function App() {
     };
 
     const handleCommentClick = (postId) => {
-        const postIndex = posts.findIndex((post) => post.id === postId);
-        const post = posts[postIndex];
-        if (post.commentsShown) {
-            post.commentsShown = false;
-            setPosts([...posts]);
-        } else {
-            fetch(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    post.commentsShown = true;
-                    post.comments = data;
-                    setPosts([...posts]);
-                });
-        }
-    };
-    return (
+        const updatedPosts = posts.map((post) => {
+            if (post.id === postId) {
+                return {
+                    ...post,
+                    commentsShown: !post.commentsShown,
+                    comments: post.commentsShown ? [] : post.comments
+                };
+            }
+            return post;
+        });
 
+        setPosts(updatedPosts);
+    };
+
+    const handleNumberOfPostsChange = (number) => {
+        setNumberOfPosts(number);
+    };
+
+    return (
         <body>
         <div className="App">
             <Header
@@ -66,8 +72,16 @@ function App() {
                 handleSearchChange={handleSearchChange}
                 handleKeyDown={handleKeyDown}
                 handleSearchClick={handleSearchClick}
+                handleNumberOfPostsChange={handleNumberOfPostsChange}
+                numberOfPosts={numberOfPosts}
             />
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div className={"App-body"}>
             <SearchResults posts={posts} handleCommentClick={handleCommentClick} />
+            </div>
         </div>
         </body>
     );
