@@ -6,11 +6,9 @@ import SearchResults from "./SearchResults";
 function App() {
 
 
-
     const [searchTerm, setSearchTerm] = useState('');
     const [posts, setPosts] = useState([]);
     const [numberOfPosts, setNumberOfPosts] = useState(5);
-
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -36,8 +34,7 @@ function App() {
                             .then((response) => response.json())
                             .then((user) => {
                                 post.name = user.name;
-                               // post.puste = "\n";
-                                console.log(typeof post);
+                                post.puste = "\n";
                                 return post;
                             })
                     )
@@ -51,11 +48,17 @@ function App() {
     const handleCommentClick = (postId) => {
         const updatedPosts = posts.map((post) => {
             if (post.id === postId) {
-                return {
-                    ...post,
-                    commentsShown: !post.commentsShown,
-                    comments: post.commentsShown ? [] : post.comments
-                };
+                if (!post.commentsShown) {
+                    fetch(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            const updatedPost = { ...post, comments: data, commentsShown: true };
+                            setPosts(posts => posts.map((p) => (p.id === postId ? updatedPost : p)));
+                        });
+                } else {
+                    const updatedPost = { ...post, commentsShown: false };
+                    setPosts(posts => posts.map((p) => (p.id === postId ? updatedPost : p)));
+                }
             }
             return post;
         });
@@ -63,25 +66,9 @@ function App() {
         setPosts(updatedPosts);
     };
 
+
     const handleNumberOfPostsChange = (number) => {
         setNumberOfPosts(number);
-    };
-
-    const handleMainSideClick = () => {
-            fetch('https://jsonplaceholder.typicode.com/posts')
-                .then((response) => response.json())
-                .then((data) => {
-                    const randomIndexes = [];
-                    while (randomIndexes.length < 5) {
-                        const randomIndex = Math.floor(Math.random() * data.length);
-                        if (!randomIndexes.includes(randomIndex)) {
-                            randomIndexes.push(randomIndex);
-                        }
-                    }
-
-                    const randomPosts = randomIndexes.map((index) => data[index]);
-                    setPosts(randomPosts);
-                });
     };
 
     return (
@@ -93,7 +80,6 @@ function App() {
                 handleKeyDown={handleKeyDown}
                 handleSearchClick={handleSearchClick}
                 handleNumberOfPostsChange={handleNumberOfPostsChange}
-                handleMainSideClick={handleMainSideClick}
                 numberOfPosts={numberOfPosts}
             />
             <br/>

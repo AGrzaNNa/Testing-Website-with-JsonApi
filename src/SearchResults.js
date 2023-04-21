@@ -12,9 +12,9 @@ function SearchResults({ posts = [], handleCommentClick }) {
                         {post.commentsShown ? 'Hide Comments' : 'Show Comments'}
                     </button>
                     <br />
-                    {post.commentsShown && (
+                    {post.commentsShown && post.comments && (
                         <ul>
-                            {post.comments.map((comment) => (
+                            {post.comments && post.comments.map((comment) => (
                                 <li key={comment.id}>
                                     <p>Author: {comment.email}</p>
                                     <p>{comment.body}</p>
