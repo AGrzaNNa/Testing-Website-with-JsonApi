@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import searchResults from "./SearchResults";
 
 function Header(props) {
-    const { searchTerm, handleSearchChange, handleKeyDown, handleSearchClick, handleNumberOfPostsChange, numberOfPosts } = props;
+    const { searchTerm, handleSearchChange, handleKeyDown, handleSearchClick, handleNumberOfPostsChange, numberOfPosts, handleMainSideClick} = props;
     const [numberInput, setNumberInput] = useState(numberOfPosts);
 
     const handleNumberChange = (event) => {
@@ -10,6 +11,10 @@ function Header(props) {
 
     const handleNumberInputBlur = () => {
         handleNumberOfPostsChange(parseInt(numberInput));
+    };
+
+    const handleMainSideClick1 = () =>  {
+        handleMainSideClick()
     };
 
     return (
@@ -25,7 +30,9 @@ function Header(props) {
             </div>
             <div>
                 <input type="number" className="number-input" placeholder="Number" onKeyDown={handleKeyDown} value={numberInput} onChange={handleNumberChange} onBlur={handleNumberInputBlur} />
-
+            </div>
+            <div>
+                <button className="btnmainside" onClick={handleMainSideClick1}>Main Side</button>
             </div>
             <nav className="App-navi">
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

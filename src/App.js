@@ -6,9 +6,11 @@ import SearchResults from "./SearchResults";
 function App() {
 
 
+
     const [searchTerm, setSearchTerm] = useState('');
     const [posts, setPosts] = useState([]);
-    const [numberOfPosts, setNumberOfPosts] = useState(0);
+    const [numberOfPosts, setNumberOfPosts] = useState(5);
+
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -34,7 +36,8 @@ function App() {
                             .then((response) => response.json())
                             .then((user) => {
                                 post.name = user.name;
-                                post.puste = "\n";
+                               // post.puste = "\n";
+                                console.log(typeof post);
                                 return post;
                             })
                     )
@@ -64,6 +67,23 @@ function App() {
         setNumberOfPosts(number);
     };
 
+    const handleMainSideClick = () => {
+            fetch('https://jsonplaceholder.typicode.com/posts')
+                .then((response) => response.json())
+                .then((data) => {
+                    const randomIndexes = [];
+                    while (randomIndexes.length < 5) {
+                        const randomIndex = Math.floor(Math.random() * data.length);
+                        if (!randomIndexes.includes(randomIndex)) {
+                            randomIndexes.push(randomIndex);
+                        }
+                    }
+
+                    const randomPosts = randomIndexes.map((index) => data[index]);
+                    setPosts(randomPosts);
+                });
+    };
+
     return (
         <body>
         <div className="App">
@@ -73,6 +93,7 @@ function App() {
                 handleKeyDown={handleKeyDown}
                 handleSearchClick={handleSearchClick}
                 handleNumberOfPostsChange={handleNumberOfPostsChange}
+                handleMainSideClick={handleMainSideClick}
                 numberOfPosts={numberOfPosts}
             />
             <br/>
