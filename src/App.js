@@ -36,8 +36,6 @@ function App() {
                             .then((response) => response.json())
                             .then((user) => {
                                 post.name = user.name;
-                               // post.puste = "\n";
-                                console.log(typeof post);
                                 return post;
                             })
                     )
@@ -49,18 +47,20 @@ function App() {
     };
 
     const handleCommentClick = (postId) => {
-        const updatedPosts = posts.map((post) => {
-            if (post.id === postId) {
-                return {
-                    ...post,
-                    commentsShown: !post.commentsShown,
-                    comments: post.commentsShown ? [] : post.comments
-                };
-            }
-            return post;
-        });
-
-        setPosts(updatedPosts);
+        const postIndex = posts.findIndex((post) => post.id === postId);
+        const post = posts[postIndex];
+        if (post.commentsShown) {
+            post.commentsShown = false;
+            setPosts([...posts]);
+        } else {
+            fetch(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    post.commentsShown = true;
+                    post.comments = data;
+                    setPosts([...posts]);
+                });
+        }
     };
 
     const handleNumberOfPostsChange = (number) => {
