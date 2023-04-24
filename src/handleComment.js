@@ -1,4 +1,4 @@
-export const handleComment = (postId, posts, setPosts) => {
+export default function handleCommentClick(postId, posts, setPosts) {
     const postIndex = posts.findIndex((post) => post.id === postId);
     const post = posts[postIndex];
     if (post.commentsShown) {

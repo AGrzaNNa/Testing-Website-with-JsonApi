@@ -2,14 +2,15 @@ import './App.css';
 import { useState } from "react";
 import Header from './Header';
 import SearchResults from "./SearchResults";
+import handleCommentClick from './handleComment';
+import handleMainSide from "./handleMainSide";
 
 function App() {
-
-
 
     const [searchTerm, setSearchTerm] = useState('');
     const [posts, setPosts] = useState([]);
     const [numberOfPosts, setNumberOfPosts] = useState(5);
+
 
 
     const handleSearchChange = (event) => {
@@ -27,7 +28,7 @@ function App() {
             .then((response) => response.json())
             .then((data) => {
                 const matchingPosts = data.filter((post) =>
-                    post.title.toLowerCase().startsWith(searchTerm.toLowerCase())
+                    post.title.length >= 10 && post.title.length <= 25 &&  post.title.toLowerCase().startsWith(searchTerm.toLowerCase()) // Change the condition to the desired length range
                 ).slice(0, numberOfPosts);
 
                 Promise.all(
@@ -45,44 +46,11 @@ function App() {
                 });
             });
     };
-
-    const handleCommentClick = (postId) => {
-        const postIndex = posts.findIndex((post) => post.id === postId);
-        const post = posts[postIndex];
-        if (post.commentsShown) {
-            post.commentsShown = false;
-            setPosts([...posts]);
-        } else {
-            fetch(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    post.commentsShown = true;
-                    post.comments = data;
-                    setPosts([...posts]);
-                });
-        }
-    };
-
     const handleNumberOfPostsChange = (number) => {
         setNumberOfPosts(number);
     };
 
-    const handleMainSideClick = () => {
-            fetch('https://jsonplaceholder.typicode.com/posts')
-                .then((response) => response.json())
-                .then((data) => {
-                    const randomIndexes = [];
-                    while (randomIndexes.length < 5) {
-                        const randomIndex = Math.floor(Math.random() * data.length);
-                        if (!randomIndexes.includes(randomIndex)) {
-                            randomIndexes.push(randomIndex);
-                        }
-                    }
 
-                    const randomPosts = randomIndexes.map((index) => data[index]);
-                    setPosts(randomPosts);
-                });
-    };
 
     return (
         <body>
@@ -93,15 +61,15 @@ function App() {
                 handleKeyDown={handleKeyDown}
                 handleSearchClick={handleSearchClick}
                 handleNumberOfPostsChange={handleNumberOfPostsChange}
-                handleMainSideClick={handleMainSideClick}
+                handleMainSideClick={() => handleMainSide(setPosts,numberOfPosts)}
                 numberOfPosts={numberOfPosts}
             />
-            <br/>
-            <br/>
-            <br/>
-            <br/>
+            <br />
+            <br />
+            <br />
+            <br />
             <div className={"App-body"}>
-            <SearchResults posts={posts} handleCommentClick={handleCommentClick} />
+                <SearchResults posts={posts} handleCommentClick={(postId) => handleCommentClick(postId, posts, setPosts)} />
             </div>
         </div>
         </body>
