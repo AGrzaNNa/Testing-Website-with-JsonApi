@@ -31,3 +31,6 @@ function SearchResults({ posts = [], handleCommentClick }) {
 }
 
 export default SearchResults;
+
+
+
