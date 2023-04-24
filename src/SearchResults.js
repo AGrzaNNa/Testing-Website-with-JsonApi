@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function SearchResults({ posts = [], handleCommentClick }) {
+function SearchResults({ posts = [], albums = [], handleCommentClick, handlePhotoClick }) {
     return (
         <div id="search-results">
             {posts.map((post) => (
@@ -26,11 +26,28 @@ function SearchResults({ posts = [], handleCommentClick }) {
                     <br />
                 </div>
             ))}
+            {albums.map((album) => (
+                <div key={album.id}>
+                    <h2>{album.title}</h2>
+                    <p>Author: {album.author}</p>
+                    <button className="showcomments" onClick={() => handlePhotoClick(album.id)}>
+                        {album.photosShown ? 'Hide Photos' : 'Show Photos'}
+                    </button>
+                    <br />
+                    {album.photosShown && album.photos && (
+                        <ul>
+                            {album.photos && album.photos.map((photo) => (
+                                <li key={photo.id}>
+                                    <img src={photo.thumbnailUrl} alt={photo.title} />
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                    <br />
+                </div>
+            ))}
         </div>
     );
 }
 
 export default SearchResults;
-
-
-

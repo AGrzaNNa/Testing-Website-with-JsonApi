@@ -3,12 +3,14 @@ import { useState } from "react";
 import Header from './Header';
 import SearchResults from "./SearchResults";
 import handleCommentClick from './handleComment';
+import handlePhotoClick from "./handlePhotosClick";
 import handleMainSide from "./handleMainSide";
 
 function App() {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [posts, setPosts] = useState([]);
+    const [albums, setAlbums] = useState([]);
     const [numberOfPosts, setNumberOfPosts] = useState(5);
 
     const [numberFromInput, setNumberFromInput] = useState(10);
@@ -47,7 +49,32 @@ function App() {
                     setSearchTerm('');
                 });
             });
+        fetch('https://jsonplaceholder.typicode.com/albums')
+            .then((response) => response.json())
+            .then((data) => {
+                const matchingAlbums = data.filter((album) =>
+                    album.title.toLowerCase().startsWith(searchTerm.toLowerCase())
+                ).slice(0, numberOfPosts);
+
+                Promise.all(
+                    matchingAlbums.map((album) =>
+                        fetch(`https://jsonplaceholder.typicode.com/users/${album.userId}`)
+                            .then((response) => response.json())
+                            .then((user) => {
+                                album.author = user.name;
+                                return album;
+                            })
+                    )
+                ).then((albumsWithUserData) => {
+                    setAlbums(albumsWithUserData);
+                    setSearchTerm('');
+                });
+            });
     };
+
+
+
+
     const handleNumberOfPostsChange = (number) => {
         setNumberOfPosts(number);
     };
@@ -70,7 +97,7 @@ function App() {
                 handleKeyDown={handleKeyDown}
                 handleSearchClick={handleSearchClick}
                 handleNumberOfPostsChange={handleNumberOfPostsChange}
-                handleMainSideClick={() => handleMainSide(setPosts,numberOfPosts)}
+                handleMainSideClick={() => handleMainSide(setPosts,numberOfPosts, setAlbums)}
                 numberOfPosts={numberOfPosts}
                 handleFromChange={handleNumberInputFromChange}
                 handleToChange={handleNumberInputToChange}
@@ -80,7 +107,7 @@ function App() {
             <br />
             <br />
             <div className={"App-body"}>
-                <SearchResults posts={posts} handleCommentClick={(postId) => handleCommentClick(postId, posts, setPosts)} />
+                <SearchResults posts={posts} albums={albums} handleCommentClick={(postId) => handleCommentClick(postId, posts, setPosts)} handlePhotoClick={(albumId) => handlePhotoClick(albumId, albums, setAlbums)}/>
             </div>
         </div>
         </body>

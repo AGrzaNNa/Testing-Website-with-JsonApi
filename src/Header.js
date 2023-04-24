@@ -59,12 +59,11 @@ function Header(props) {
                 <input type="number" className="number-input" placeholder="To" onChange={handleNumberToChange} value={numberToInput}  onBlur={handleNumberInputToBlur} />
             </div>
             <div>
-                <button className="btnmainside" onClick={handleMainSideClick1}>Main Side</button>
+                <button className="showcomments" onClick={handleMainSideClick1}>Main Side</button>
             </div>
             <nav className="App-navi">
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a href="#">Options</a>
-                <button className="btnlogin" onClick={handleSearchClick}>Login</button>
             </nav>
         </header>
     );
