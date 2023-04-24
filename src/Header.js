@@ -65,6 +65,7 @@ function Header(props) {
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a href="#">Options</a>
             </nav>
+
         </header>
     );
 }
