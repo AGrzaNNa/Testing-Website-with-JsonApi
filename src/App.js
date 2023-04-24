@@ -11,6 +11,8 @@ function App() {
     const [posts, setPosts] = useState([]);
     const [numberOfPosts, setNumberOfPosts] = useState(5);
 
+    const [numberFromInput, setNumberFromInput] = useState(10);
+    const [numberToInput, setNumberToInput] = useState(50);
 
 
     const handleSearchChange = (event) => {
@@ -28,7 +30,7 @@ function App() {
             .then((response) => response.json())
             .then((data) => {
                 const matchingPosts = data.filter((post) =>
-                    post.title.length >= 10 && post.title.length <= 25 &&  post.title.toLowerCase().startsWith(searchTerm.toLowerCase()) // Change the condition to the desired length range
+                    post.title.length >= numberFromInput && post.title.length <= numberToInput &&  post.title.toLowerCase().startsWith(searchTerm.toLowerCase())
                 ).slice(0, numberOfPosts);
 
                 Promise.all(
@@ -50,6 +52,13 @@ function App() {
         setNumberOfPosts(number);
     };
 
+    const handleNumberInputFromChange = (numberFrom) => {
+        setNumberFromInput(numberFrom);
+    };
+    const handleNumberInputToChange = (numberTo) => {
+        setNumberToInput(numberTo);
+    };
+
 
 
     return (
@@ -63,6 +72,8 @@ function App() {
                 handleNumberOfPostsChange={handleNumberOfPostsChange}
                 handleMainSideClick={() => handleMainSide(setPosts,numberOfPosts)}
                 numberOfPosts={numberOfPosts}
+                handleFromChange={handleNumberInputFromChange}
+                handleToChange={handleNumberInputToChange}
             />
             <br />
             <br />
