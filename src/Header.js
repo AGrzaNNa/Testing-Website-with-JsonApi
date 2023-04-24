@@ -2,10 +2,20 @@ import React, { useState } from 'react';
 import searchResults from "./SearchResults";
 
 function Header(props) {
-    const { searchTerm, handleSearchChange, handleKeyDown, handleSearchClick, handleNumberOfPostsChange, numberOfPosts, handleMainSideClick, to, from } = props;
+    const { searchTerm, handleSearchChange, handleKeyDown, handleSearchClick, handleNumberOfPostsChange, numberOfPosts, handleMainSideClick, handleFromChange, handleToChange, to, from } = props;
+
     const [numberInput, setNumberInput] = useState(numberOfPosts);
+
     const [numberToInput, setNumberToInput] = useState(to);
     const [numberFromInput, setNumberFromInput] = useState(from);
+
+    const handleNumberToChange = (event) => {
+        setNumberToInput(event.target.value);
+    };
+
+    const handleNumberInputToBlur = () => {
+        handleToChange(parseInt(numberToInput));
+    };
 
     const handleNumberChange = (event) => {
         setNumberInput(event.target.value);
@@ -13,6 +23,14 @@ function Header(props) {
 
     const handleNumberInputBlur = () => {
         handleNumberOfPostsChange(parseInt(numberInput));
+    };
+
+    const handleNumberFromChange = (event) => {
+        setNumberFromInput(event.target.value);
+    };
+
+    const handleNumberInputFromBlur = () => {
+        handleFromChange(parseInt(numberFromInput));
     };
 
 
@@ -32,13 +50,13 @@ function Header(props) {
                 <input type="text" className="search-bar-input" placeholder="Search" value={searchTerm} onChange={handleSearchChange} onKeyDown={handleKeyDown} />
             </div>
             <div>
-                <input type="number" className="number-input" placeholder="Number" value={numberInput}  onBlur={handleNumberInputBlur} />
+                <input type="number" className="number-input" placeholder="Number" onChange={handleNumberChange} value={numberInput}  onBlur={handleNumberInputBlur} />
             </div>
             <div>
-                <input type="number" className="number-input" placeholder="From"  value={numberFromInput} onBlur={handleNumberInputBlur} />
+                <input type="number" className="number-input" placeholder="From" onChange={handleNumberFromChange}  value={numberFromInput} onBlur={handleNumberInputFromBlur} />
             </div>
             <div>
-                <input type="number" className="number-input" placeholder="To"  value={numberToInput}  onBlur={handleNumberInputBlur} />
+                <input type="number" className="number-input" placeholder="To" onChange={handleNumberToChange} value={numberToInput}  onBlur={handleNumberInputToBlur} />
             </div>
             <div>
                 <button className="btnmainside" onClick={handleMainSideClick1}>Main Side</button>
