@@ -170,6 +170,21 @@ header{
   color: aliceblue;
   transition:.5s ;
 }
+.spinner {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #007bff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 
 

@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from "react";
+import React, { useState } from "react";
 import Header from './Header';
 import SearchResults from "./SearchResults";
 import handleCommentClick from './handleComment';
@@ -116,6 +116,7 @@ function App() {
             <br />
             <br />
             <div className={"App-body"}>
+                <div className="spinner"></div>
                 <SearchResults posts={posts} albums={albums} handleCommentClick={(postId) => handleCommentClick(postId, posts, setPosts)} handlePhotoClick={(albumId) => handlePhotoClick(albumId, albums, setAlbums)}/>
             </div>
         </div>

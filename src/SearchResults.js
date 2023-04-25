@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 function SearchResults({ posts = [], albums = [], handleCommentClick, handlePhotoClick }) {
+
     return (
         <div id="search-results">
             {posts.map((post) => (

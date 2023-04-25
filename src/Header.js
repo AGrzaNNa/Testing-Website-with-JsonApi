@@ -61,6 +61,12 @@ function Header(props) {
             <div>
                 <button className="showcomments" onClick={handleMainSideClick1}>Main Side</button>
             </div>
+            <select>
+                <option value="option1">alphabetically</option>
+                <option value="option2">reverse alphabetically </option>
+                <option value="option3">only posts</option>
+                <option value="option4">only albums</option>
+            </select>
             <nav className="App-navi">
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a href="#">Options</a>
