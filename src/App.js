@@ -1,4 +1,6 @@
 import './App.css';
+import {GoogleLoginButton} from "react-social-login-buttons";
+import {LoginSocialGoogle} from "reactjs-social-login";
 
 import Header from './Header';
 import SearchResults from "./SearchResults";
@@ -16,7 +18,6 @@ function App() {
     const [numberOfPosts, setNumberOfPosts] = useState(5);
     const [numberFromInput, setNumberFromInput] = useState(10);
     const [numberToInput, setNumberToInput] = useState(50);
-
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -119,6 +120,22 @@ function App() {
             <br />
 
             <div className={"App-body"}>
+                <div>
+                    <LoginSocialGoogle
+                        client_id={"282258299718-k1t8jhiesr3k7iguk7qaoi50gbd13aob.apps.googleusercontent.com"}
+                        scope="Opening profile email"
+                        discoveryDocs="claims_supported"
+                        access_type="offline"
+                        onReject={(err)=> {
+                            console.log(err);
+                        }}
+                        onResolve={({provider,data})=> {
+                            console.log(provider, data);
+                        }}
+                    >
+                        <GoogleLoginButton/>
+                    </LoginSocialGoogle>
+                </div>
                 <div className="spinner"></div>
                 <SearchResults posts={posts} albums={albums} handleCommentClick={(postId) => handleCommentClick(postId, posts, setPosts)} handlePhotoClick={(albumId) => handlePhotoClick(albumId, albums, setAlbums)}/>
             </div>
