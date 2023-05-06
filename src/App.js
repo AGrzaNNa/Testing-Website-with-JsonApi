@@ -1,6 +1,5 @@
 import './App.css';
-import { useState } from "react";
-import { GoogleLogin } from '@react-oauth/google';
+
 import Header from './Header';
 import SearchResults from "./SearchResults";
 import handleCommentClick from './handleComment';
@@ -23,8 +22,8 @@ function App() {
     const [searchTerm, setSearchTerm] = useState('');
     const [posts, setPosts] = useState([]);
     const [albums, setAlbums] = useState([]);
-    const [numberOfPosts, setNumberOfPosts] = useState(5);
 
+    const [numberOfPosts, setNumberOfPosts] = useState(5);
     const [numberFromInput, setNumberFromInput] = useState(10);
     const [numberToInput, setNumberToInput] = useState(50);
 
@@ -44,7 +43,9 @@ function App() {
             .then((response) => response.json())
             .then((data) => {
                 const matchingPosts = data.filter((post) =>
-                    post.title.length >= numberFromInput && post.title.length <= numberToInput &&  post.title.toLowerCase().startsWith(searchTerm.toLowerCase())
+                    post.title.length >= numberFromInput &&
+                    post.title.length <= numberToInput &&
+                    post.title.toLowerCase().startsWith(searchTerm.toLowerCase())
                 ).slice(0, numberOfPosts);
 
                 Promise.all(
@@ -57,34 +58,41 @@ function App() {
                             })
                     )
                 ).then((postsWithUserData) => {
-                    setPosts(postsWithUserData);
-                    setSearchTerm('');
-                });
-            });
-        fetch('https://jsonplaceholder.typicode.com/albums')
-            .then((response) => response.json())
-            .then((data) => {
-                const matchingAlbums = data.filter((album) =>
-                    album.title.toLowerCase().startsWith(searchTerm.toLowerCase())
-                ).slice(0, numberOfPosts);
-
-                Promise.all(
-                    matchingAlbums.map((album) =>
-                        fetch(`https://jsonplaceholder.typicode.com/users/${album.userId}`)
+                    const remainingPostsCount = numberOfPosts - postsWithUserData.length;
+                    if (remainingPostsCount > 0) {
+                        fetch('https://jsonplaceholder.typicode.com/albums')
                             .then((response) => response.json())
-                            .then((user) => {
-                                album.author = user.name;
-                                return album;
-                            })
-                    )
-                ).then((albumsWithUserData) => {
-                    setAlbums(albumsWithUserData);
-                    setSearchTerm('');
+                            .then((data) => {
+                                const matchingAlbums = data.filter((album) =>
+                                    album.title.length >= numberFromInput &&
+                                    album.title.length <= numberToInput &&
+                                    album.title.toLowerCase().startsWith(searchTerm.toLowerCase())
+                                ).slice(0, remainingPostsCount);
+
+                                Promise.all(
+                                    matchingAlbums.map((album) =>
+                                        fetch(`https://jsonplaceholder.typicode.com/users/${album.userId}`)
+                                            .then((response) => response.json())
+                                            .then((user) => {
+                                                album.author = user.name;
+                                                return album;
+                                            })
+                                    )
+                                ).then((albumsWithUserData) => {
+                                    const combinedResults = [...postsWithUserData, ...albumsWithUserData];
+                                    combinedResults.sort(() => Math.random() - 0.5);
+                                    setAlbums(albumsWithUserData);
+                                    setPosts(postsWithUserData);
+                                    setSearchTerm('');
+                                });
+                            });
+                    } else {
+                        setPosts(postsWithUserData);
+                        setSearchTerm('');
+                    }
                 });
             });
     };
-
-
 
 
     const handleNumberOfPostsChange = (number) => {
@@ -123,6 +131,7 @@ function App() {
                 <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
             </div>
             <div className={"App-body"}>
+                <div className="spinner"></div>
                 <SearchResults posts={posts} albums={albums} handleCommentClick={(postId) => handleCommentClick(postId, posts, setPosts)} handlePhotoClick={(albumId) => handlePhotoClick(albumId, albums, setAlbums)}/>
             </div>
         </div>
