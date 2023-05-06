@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from "react";
+
 import Header from './Header';
 import SearchResults from "./SearchResults";
 import handleCommentClick from './handleComment';
@@ -7,6 +7,17 @@ import handlePhotoClick from "./handlePhotosClick";
 import handleMainSide from "./handleMainSide";
 
 function App() {
+
+    //ToDO logowanie
+
+    const responseMessage = (response) => {
+        console.log(response);
+    };
+    const errorMessage = (error) => {
+        console.log(error);
+    };
+
+    //TODO KONIEC
 
     const [searchTerm, setSearchTerm] = useState('');
     const [posts, setPosts] = useState([]);
@@ -110,11 +121,15 @@ function App() {
                 numberOfPosts={numberOfPosts}
                 handleFromChange={handleNumberInputFromChange}
                 handleToChange={handleNumberInputToChange}
+
             />
             <br />
             <br />
             <br />
             <br />
+            <div>
+                <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
+            </div>
             <div className={"App-body"}>
                 <div className="spinner"></div>
                 <SearchResults posts={posts} albums={albums} handleCommentClick={(postId) => handleCommentClick(postId, posts, setPosts)} handlePhotoClick={(albumId) => handlePhotoClick(albumId, albums, setAlbums)}/>

@@ -53,7 +53,7 @@ function Header(props) {
                 <input type="number" className="number-input" placeholder="Number" onChange={handleNumberChange} value={numberInput}  onBlur={handleNumberInputBlur} />
             </div>
             <div>
-                <input type="number" className="number-input" placeholder="From" onChange={handleNumberFromChange}  value={numberFromInput} onBlur={handleNumberInputFromBlur} />
+                <input type="number" className="number-input" placeholder="From " onChange={handleNumberFromChange}  value={numberFromInput} onBlur={handleNumberInputFromBlur} />
             </div>
             <div>
                 <input type="number" className="number-input" placeholder="To" onChange={handleNumberToChange} value={numberToInput}  onBlur={handleNumberInputToBlur} />
