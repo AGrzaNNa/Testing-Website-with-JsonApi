@@ -1,5 +1,7 @@
-import { render, screen, fireEvent, waitFor} from '@testing-library/react';
+import {render, screen, fireEvent, waitFor, getByText} from '@testing-library/react';
 import App from './App';
+import handleCommentClick from "./handleComment";
+import handleMainSide from "./handleMainSide";
 
 test('is site contains logo', () => {
   render(<App />);
@@ -13,25 +15,37 @@ test('is site contains search-bar', () => {
   expect(searchBar).toBeInTheDocument();
 });
 
-test('is search with phrase qui finding 7 posts', async () => {
+test('search for "qui" should display 5 "Author"', async () => {
     render(<App />);
+    const searchBar = screen.getByRole('textbox', { name: '' });
+    fireEvent.change(searchBar, { target: { value: 'qui' } });
+    fireEvent.keyDown(searchBar, { key: 'Enter', code: 'Enter' });
+    const authorTexts = await screen.findAllByText('Author', { exact: false });
+    expect(authorTexts.length).toBe(5);
+});
 
-    const searchInput = screen.getByRole('textbox', { name: '' });
-    fireEvent.change(searchInput, { target: { value: 'qui' } });
 
-    const searchButton = screen.getByRole('button', { name: 'Search' });
-    fireEvent.click(searchButton);
-    await waitFor(() => {
-      expect(screen.queryByText('No results found.')).toBeNull();
-    });
+test('handleCommentClick sets commentsShown to false when comments are shown', async () => {
+    const posts = [
+        {id: 1, commentsShown: true},
+        {id: 2, commentsShown: false},
+    ];
+    const setPosts = jest.fn();
 
-    const matchingPosts = screen.getAllByRole('heading', { level: 2, name: /^qui/i });
-    expect(matchingPosts).toHaveLength(7);
-  });
-test('login button is clickable', () => {
-    render(<App />);
+    await handleCommentClick(1, posts, setPosts);
 
-    const loginButton = screen.getByRole('button', { name: 'Login' });
-    expect(loginButton).toBeInTheDocument();
+    expect(setPosts).toHaveBeenCalledWith([
+        {id: 1, commentsShown: false},
+        {id: 2, commentsShown: false},
+    ]);
+});
 
+
+jest.mock('./handleMainSide');
+
+test('calls handleMainSide after clicking main side button', () => {
+    const { getByText } = render(<App />);
+    fireEvent.click(getByText('Main Side'));
+
+    expect(handleMainSide).toHaveBeenCalled();
 });

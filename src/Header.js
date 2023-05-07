@@ -59,7 +59,7 @@ function Header(props) {
                 <input type="number" className="number-input" placeholder="To" onChange={handleNumberToChange} value={numberToInput}  onBlur={handleNumberInputToBlur} />
             </div>
             <div>
-                <button className="showcomments" onClick={handleMainSideClick1}>Main Side</button>
+                <button id = "main-side-button" className="showcomments" onClick={handleMainSideClick1}>Main Side</button>
             </div>
             <select>
                 <option value="option1">alphabetically</option>
