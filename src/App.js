@@ -1,10 +1,11 @@
 import './App.css';
-import React, { useState } from "react";
+
 import Header from './Header';
 import SearchResults from "./SearchResults";
 import handleCommentClick from './handleComment';
 import handlePhotoClick from "./handlePhotosClick";
 import handleMainSide from "./handleMainSide";
+import {useState} from "react";
 
 function App() {
 
@@ -110,11 +111,13 @@ function App() {
                 numberOfPosts={numberOfPosts}
                 handleFromChange={handleNumberInputFromChange}
                 handleToChange={handleNumberInputToChange}
+
             />
             <br />
             <br />
             <br />
             <br />
+
             <div className={"App-body"}>
                 <div className="spinner"></div>
                 <SearchResults posts={posts} albums={albums} handleCommentClick={(postId) => handleCommentClick(postId, posts, setPosts)} handlePhotoClick={(albumId) => handlePhotoClick(albumId, albums, setAlbums)}/>
