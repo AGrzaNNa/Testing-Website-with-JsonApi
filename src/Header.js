@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import searchResults from "./SearchResults";
+import {GoogleLoginButton} from "react-social-login-buttons";
+import {LoginSocialGoogle} from "reactjs-social-login";
 
 function Header(props) {
     const { searchTerm, handleSearchChange, handleKeyDown, handleSearchClick, handleNumberOfPostsChange, numberOfPosts, handleMainSideClick, handleFromChange, handleToChange, to, from } = props;
@@ -71,7 +73,19 @@ function Header(props) {
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a href="#">Options</a>
             </nav>
-
+                <div className="login">
+                    <LoginSocialGoogle
+                        client_id={"282258299718-k1t8jhiesr3k7iguk7qaoi50gbd13aob.apps.googleusercontent.com"}
+                        onReject={(err)=> {
+                            console.log(err);
+                        }}
+                        onResolve={({provider,data})=> {
+                            console.log(provider, data);
+                        }}
+                    >
+                        <GoogleLoginButton/>
+                    </LoginSocialGoogle>
+                </div>
         </header>
     );
 }

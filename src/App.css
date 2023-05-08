@@ -28,6 +28,10 @@ header{
   align-items: center;
   z-index: 99;
 }
+.login{
+  padding: 20px 80px;
+  width: 100%;
+}
 .App-Logo{
   font-size: 2em;
   color: aliceblue;
