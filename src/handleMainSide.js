@@ -9,44 +9,34 @@ const handleMainSide = (setPosts, numberOfPosts, setAlbums) => {
             const [posts, albums, users] = data;
 
             var lp;
-            var la=parseInt(numberOfPosts/2);
-            if(numberOfPosts%2===0){
-                lp=parseInt(numberOfPosts/2);
-            }
-            else{
-                lp=parseInt(numberOfPosts/2+1);
-            }
-            const randomIndexes = [];
-            while (randomIndexes.length < lp) {
-                const randomIndex = Math.floor(Math.random() * posts.length);
-                if (!randomIndexes.includes(randomIndex)) {
-                    randomIndexes.push(randomIndex);
-                }
-            }
-            const randomPosts = randomIndexes.map((index) => {
-                const post = posts[index];
-                const user = users.find((u) => u.id === post.userId);
-                post.name=user.name;
-                return { ...post, user };
-            });
-            setPosts(randomPosts);
-
-            const randomAlbumIndexes = [];
-            while (randomAlbumIndexes.length < la) {
-                const randomAlbumIndex = Math.floor(Math.random() * albums.length);
-                if (!randomAlbumIndexes.includes(randomAlbumIndex)) {
-                    randomAlbumIndexes.push(randomAlbumIndex);
-                }
+            var la = parseInt(numberOfPosts / 2);
+            if (numberOfPosts % 2 === 0) {
+                lp = parseInt(numberOfPosts / 2);
+            } else {
+                lp = parseInt(numberOfPosts / 2) + 1;
             }
 
-            const randomAlbums = randomAlbumIndexes.map((index) => {
-                const album = albums[index];
-                const user = users.find((u) => u.id === album.userId);
-                album.author=user.name;
-                return { ...album, user };
-            });
-            setAlbums(randomAlbums);
+            const combinedResults = [];
+            let i = 0;
+            let j = 0;
+            while (i < lp && j < la) {
+                if (Math.random() < 0.5) {
+                    combinedResults.push({ type: 'post', ...posts[i++] });
+                } else {
+                    combinedResults.push({ type: 'album', ...albums[j++] });
+                }
+            }
+            while (i < lp) {
+                combinedResults.push({ type: 'post', ...posts[i++] });
+            }
+            while (j < la) {
+                combinedResults.push({ type: 'album', ...albums[j++] });
+            }
+
+            setPosts(combinedResults.filter((r) => r.type === 'post'));
+            setAlbums(combinedResults.filter((r) => r.type === 'album'));
         });
 };
+
 
 export default handleMainSide;
