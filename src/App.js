@@ -111,6 +111,8 @@ function App() {
                 numberOfPosts={numberOfPosts}
                 handleFromChange={handleNumberInputFromChange}
                 handleToChange={handleNumberInputToChange}
+                to={numberToInput}
+                from={numberFromInput}
 
             />
             <br />
