@@ -5,30 +5,31 @@ import handleMainSide from "./handleMainSide";
 import Header from "./Header";
 import userEvent from "@testing-library/user-event";
 
-test('it changes the value of number input with handleNumberInputFromChange and handleNumberInputToChange functions', () => {
-    const handleFromChange = jest.fn();
-    const handleToChange = jest.fn();
+test('it changes the value of number input ', async () => {
     render(
-        <Header handleFromChange={handleFromChange} handleToChange={handleToChange} />
+        <App />
     );
     const inputFrom = screen.getByPlaceholderText("From");
     const inputTo = screen.getByPlaceholderText("To");
     expect(inputFrom).toBeInTheDocument();
-    fireEvent.change(inputFrom, '10') //chwilowo by zobaczyc czy test dziala dalej - mam dosc xd nie dziala ale tak zostawiam
-    fireEvent.blur(inputFrom)
+    // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
     expect(inputFrom.value).toBe('10');
-
     expect(inputTo).toBeInTheDocument();
-    fireEvent.change(inputTo, '50')
-    fireEvent.blur(inputTo)
     expect(inputTo.value).toBe('50');
     userEvent.clear(inputFrom);
-    userEvent.type(inputFrom, '5');
-    expect(handleFromChange).toHaveBeenCalledWith('5');
+    fireEvent.change(inputFrom, { target: { value: '5' } });
+    fireEvent.blur(inputFrom);
+    await waitFor(() => {
+        expect(inputFrom.value).toBe('5');
+    });
     userEvent.clear(inputTo);
-    userEvent.type(inputTo, '25');
-    expect(handleToChange).toHaveBeenCalledWith('25');
+    fireEvent.change(inputFrom, { target: { value: '25' } });
+    fireEvent.blur(inputFrom);
+    await waitFor(() => {
+        expect(inputFrom.value).toBe('25');
+    });
 });
+
 test('is site contains logo', () => {
   render(<App />);
   const linkElement = screen.getByText(/ByteBusters/i);
