@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import searchResults from "./SearchResults";
+import {LoginSocialGoogle} from "reactjs-social-login";
+import {GoogleLoginButton} from "react-social-login-buttons";
 
 function Header(props) {
     const { searchTerm, handleSearchChange, handleKeyDown, handleSearchClick, handleNumberOfPostsChange, numberOfPosts, handleMainSideClick, handleFromChange, handleToChange, to, from } = props;
@@ -41,7 +43,9 @@ function Header(props) {
     return (
         <header>
             <h2 className="App-Logo">
+                <a href="button">
                 ByteBusters
+                </a>
             </h2>
             <div className="search-box">
                 <div className="search-icon">
@@ -50,13 +54,13 @@ function Header(props) {
                 <input type="text" className="search-bar-input" placeholder="Search" value={searchTerm} onChange={handleSearchChange} onKeyDown={handleKeyDown} />
             </div>
             <div>
-                <input type="number" className="number-input" placeholder="Number" onChange={handleNumberChange} value={numberInput}  onBlur={handleNumberInputBlur} />
+                <input type="number" min="0" className="number-input" placeholder="Number" onChange={handleNumberChange} value={numberInput}  onBlur={handleNumberInputBlur} />
             </div>
             <div>
-                <input type="number"  className="number-input"  placeholder="From"  onChange={handleNumberFromChange}  value={numberFromInput} onBlur={handleNumberInputFromBlur}  />
+                <input type="number" min="0" className="number-input"  placeholder="From"  onChange={handleNumberFromChange}  value={numberFromInput} onBlur={handleNumberInputFromBlur}  />
             </div>
             <div>
-                <input type="number" className="number-input"  placeholder="To"  onChange={handleNumberToChange} value={numberToInput}  onBlur={handleNumberInputToBlur} />
+                <input type="number" min="0" className="number-input"  placeholder="To"  onChange={handleNumberToChange} value={numberToInput}  onBlur={handleNumberInputToBlur} />
             </div>
             <div>
                 <button id = "main-side-button" className="showcomments" placeholder="RandomPosts" onClick={handleMainSideClick1}>Main Side</button>
@@ -71,7 +75,20 @@ function Header(props) {
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a href="#">Options</a>
             </nav>
+            <div>
+                <LoginSocialGoogle
+                    client_id={"282258299718-k1t8jhiesr3k7iguk7qaoi50gbd13aob.apps.googleusercontent.com"}
 
+                    onReject={(err)=> {
+                        console.log(err);
+                    }}
+                    onResolve={({provider,data})=> {
+                        console.log(provider, data);
+                    }}
+                >
+                    <GoogleLoginButton/>
+                </LoginSocialGoogle>
+            </div>
         </header>
     );
 }
