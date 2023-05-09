@@ -1,11 +1,12 @@
-import {render, screen, fireEvent, waitFor, getByText} from '@testing-library/react';
+// eslint-disable-next-line no-unused-vars
+import {render, screen, fireEvent, waitFor, getByText, within} from '@testing-library/react';
 import App from './App';
 import handleCommentClick from "./handleComment";
 import handleMainSide from "./handleMainSide";
-import Header from "./Header";
 import userEvent from "@testing-library/user-event";
+import Header from "./Header";
 
-test('it changes the value of number input ', async () => {
+test('it changes the value of number input', async () => {
     render(
         <App />
     );
@@ -41,6 +42,78 @@ test('is site contains search-bar', () => {
   const searchBar = screen.getByRole('textbox', { name: '' });
   expect(searchBar).toBeInTheDocument();
 });
+
+test('should render a clickable login button', () => {
+    const mockFunction = jest.fn();
+    const { getByText } = render(<Header handleLoginClick={mockFunction} />);
+    const loginButton = getByText('Log in with Google');
+    fireEvent.click(loginButton);
+    expect(mockFunction).toHaveBeenCalledTimes(1);
+});
+test('allows negative number input', () => {
+    const mockHandleNumberOfPostsChange = jest.fn();
+    const { getByPlaceholderText } = render(
+        <Header
+            searchTerm=""
+            handleSearchChange={() => {}}
+            handleKeyDown={() => {}}
+            handleSearchClick={() => {}}
+            handleNumberOfPostsChange={mockHandleNumberOfPostsChange}
+            numberOfPosts={10}
+            handleMainSideClick={() => {}}
+            handleFromChange={() => {}}
+            handleToChange={() => {}}
+            to={0}
+            from={50}
+        />
+    );
+
+    const numberInput = getByPlaceholderText('Number');
+
+    fireEvent.change(numberInput, { target: { value: '-5' } });
+    fireEvent.blur(numberInput);
+
+    expect(mockHandleNumberOfPostsChange).toHaveBeenCalledWith(-5);
+});
+test('is logo clickable', () => {
+    render(<Header />);
+    const linkElement = screen.getByText(/ByteBusters/i);
+    expect(linkElement).toBeInTheDocument();
+    userEvent.click(linkElement);
+});
+
+test('should call handleLogoClick when the logo is clicked', () => {
+    const handleLogoClick = jest.fn(); // mock function to test the onClick event
+
+    const { getByText } = render(<Header handleLogoClick={handleLogoClick} />);
+
+    const logoElement = getByText('ByteBusters');
+    fireEvent.click(logoElement);
+
+    expect(handleLogoClick).toHaveBeenCalledTimes(1);
+});
+test('should render spinner with 4 options', () => {
+    render(<Header />);
+    const select = screen.getByRole('combobox');
+    const options = select.querySelectorAll('option');
+    expect(options.length).toBe(4);
+});
+
+test('displays 5 posts after searching for "a"', async () => {
+    render(<App />);
+
+    const searchInput = screen.getByPlaceholderText("Search");
+    fireEvent.change(searchInput, { target: { value: 'a' } });
+    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
+
+    await waitFor(() => {
+        const searchResults = screen.getByTestId('search-results');
+        const headings = within(searchResults).getAllByRole('heading');
+        const postTitles = headings.filter(heading => heading.textContent.includes('a'));
+        expect(postTitles.length).toBeGreaterThanOrEqual(5);
+    });
+});
+
 
 test('search for "qui" should display 5 "Author"', async () => {
     render(<App />);
